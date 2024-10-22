@@ -4,16 +4,16 @@ using DrWatson
 using Plots
 using NonlinearSolve
 
-include(srcdir("segm_3_model.jl"))
-using .segm_3_model
+include(srcdir("NEC1S1763_3segm_approx.jl"))
+using .NEC1S1763_3segm_approx
 
 #########################################################################################
 
 u_start, u_end, u_N = 0.0, 5.0, 200
 u_range = range(u_start, u_end, u_N)
 
-v_curve_1 = segm_3_model.f.(u_range)
-v_curve_2 = segm_3_model.g.(u_range)
+v_curve_1 = NEC1S1763_3segm_approx.BAX_3segm_approx2.(u_range)
+v_curve_2 = NEC1S1763_3segm_approx.load_line_function.(u_range)
 
 t_start, t_end, t_N = 0.0, 0.3, 100
 t_span = (t_start, t_end)
@@ -27,7 +27,7 @@ u₀ = 1.0
 #########################################################################################
 
 function L₂_sol_integration(v₀)
-    sol = segm_3_model.all_obl_integrate([u₀, v₀], t_span, 2; saveat=t_range)
+    sol = NEC1S1763_3segm_approx.all_obl_integrate([u₀, v₀], t_span, 2; saveat=t_range)
     return sol
 end
 
@@ -36,8 +36,8 @@ sols_int = L₂_sol_integration.(v₀_range)
 #########################################################################################
 
 function L₂_sol_by_formula(v₀)
-    u(t) = segm_3_model.u₂(t,v₀)
-    v(t) = segm_3_model.v₂(t,v₀)
+    u(t) = NEC1S1763_3segm_approx.obl2.u(t,v₀)
+    v(t) = NEC1S1763_3segm_approx.obl2.v(t,v₀)
     return (u.(t_range), v.(t_range))
 end
 
@@ -46,10 +46,10 @@ sols_form = L₂_sol_by_formula.(v₀_range)
 #########################################################################################
 
 function L₂_map_by_formula(v₀)
-    u(t) = segm_3_model.u₂(t,v₀)
-    v(t) = segm_3_model.v₂(t,v₀)
+    u(t) = NEC1S1763_3segm_approx.obl2.u(t,v₀)
+    v(t) = NEC1S1763_3segm_approx.obl2.v(t,v₀)
 
-    f(τ,p) = u(τ) - segm_3_model.V_v/segm_3_model.V_p
+    f(τ,p) = u(τ) - NEC1S1763_3segm_approx.obl2.u_max
     sol = solve(IntervalNonlinearProblem(f, t_span))
     τ₁ = sol.u
     return v(τ₁)
@@ -77,13 +77,17 @@ end
 #     plot!(p1, sol[1], sol[2], ls=:solid, color=:red, label="", alpha=0.3)
 # end
 
-plot!(p1, segm_3_model.V_v./segm_3_model.V_p.*ones(length(ends)), ends, label="", seriestype=:scatter, ms=2)
+tmp_a = NEC1S1763_3segm_approx.V_v/NEC1S1763_3segm_approx.V_p
+plot!(p1, tmp_a.*ones(length(ends)), ends, label="", seriestype=:scatter, ms=2)
 
 hline!(p1, [0.0], color=:black, label=nothing)
 vline!(p1, [0.0], color=:black, label=nothing)
 
-vline!(p1, [1.0, segm_3_model.V_v/segm_3_model.V_p], ls=:dot, label=nothing)
-plot!(p1, [segm_3_model.u₀_st_2], [segm_3_model.v₀_st_2], label="", seriestype=:scatter, ms=2)
+tmp_a = NEC1S1763_3segm_approx.V_v/NEC1S1763_3segm_approx.V_p
+tmp_b = NEC1S1763_3segm_approx.obl2.u₀_st
+tmp_c = NEC1S1763_3segm_approx.obl2.v₀_st
+vline!(p1, [1.0, tmp_a], ls=:dot, label=nothing)
+plot!(p1, [tmp_b], [tmp_c], label="", seriestype=:scatter, ms=2)
 
 
 p = plot(p1, legend=false, size=(500,400), dpi=300)

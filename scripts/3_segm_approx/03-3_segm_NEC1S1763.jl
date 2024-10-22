@@ -7,6 +7,9 @@ using Optim
 include(srcdir("narahara_papers.jl"))
 using .narahara_papers
 
+include(srcdir("NEC1S1763_3segm_approx.jl"))
+using .NEC1S1763_3segm_approx
+
 #########################################################################################
 
 V_start, V_end, V_N = 0.0, 0.58, 200
@@ -16,18 +19,20 @@ target_I_data = narahara_papers.I_D_1.(target_V_data)
 
 #########################################################################################
 
-function piecewise_linear_3_func(x, params)
-    xa, xb, ya, yb, k = params
-    y = NaN
-    if 0 ≤ x ≤ xa
-        y = ya/xa * x
-    elseif xa ≤ x ≤ xb
-        y = (yb-ya)/(xb-xa) * (x-xa) + ya
-    elseif x ≥ xb
-        y = k*(x-xb) + yb
-    end
-    return y
-end
+# function piecewise_linear_3_func(x, params)
+#     xa, xb, ya, yb, k = params
+#     y = NaN
+#     if 0 ≤ x ≤ xa
+#         y = ya/xa * x
+#     elseif xa ≤ x ≤ xb
+#         y = (yb-ya)/(xb-xa) * (x-xa) + ya
+#     elseif x ≥ xb
+#         y = k*(x-xb) + yb
+#     end
+#     return y
+# end
+
+piecewise_linear_3_func = NEC1S1763_3segm_approx.general_3segm_approx
 
 function piecewise_linear_3_loss(params)
     func(x) = piecewise_linear_3_func(x, params)
