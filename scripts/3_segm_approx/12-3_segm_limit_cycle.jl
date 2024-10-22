@@ -1,11 +1,9 @@
 using DrWatson
-@quickactivate "masters_julia_project"
+@quickactivate "masters1semester_project"
 
 using Plots
 using NonlinearSolve
 
-# include(srcdir("segm_3_model.jl"))
-# using .segm_3_model
 include(srcdir("NEC1S1763_3segm_approx.jl"))
 using .NEC1S1763_3segm_approx
 

@@ -1,7 +1,7 @@
 module narahara_papers
 
 using DrWatson
-@quickactivate "masters_julia_project"
+@quickactivate "masters1semester_project"
 
 using DifferentialEquations
 

@@ -1,5 +1,5 @@
 using DrWatson
-@quickactivate "masters_julia_project"
+@quickactivate "masters1semester_project"
 
 using Plots
 using Optim
@@ -18,19 +18,6 @@ target_V_data = range(V_start, V_end, V_N)
 target_I_data = narahara_papers.I_D_1.(target_V_data)
 
 #########################################################################################
-
-# function piecewise_linear_3_func(x, params)
-#     xa, xb, ya, yb, k = params
-#     y = NaN
-#     if 0 ≤ x ≤ xa
-#         y = ya/xa * x
-#     elseif xa ≤ x ≤ xb
-#         y = (yb-ya)/(xb-xa) * (x-xa) + ya
-#     elseif x ≥ xb
-#         y = k*(x-xb) + yb
-#     end
-#     return y
-# end
 
 piecewise_linear_3_func = NEC1S1763_3segm_approx.general_3segm_approx
 

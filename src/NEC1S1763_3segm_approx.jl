@@ -1,7 +1,7 @@
 module NEC1S1763_3segm_approx
     
 using DrWatson
-@quickactivate "masters_julia_project"
+@quickactivate "masters1semester_project"
 
 #########################################################################################
 
