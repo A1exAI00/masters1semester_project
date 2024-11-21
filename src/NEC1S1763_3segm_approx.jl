@@ -69,6 +69,12 @@ module obl1
     u(t, v₀) = u(C₁(v₀), C₂(v₀), t)
     v(t, v₀) = v(C₁(v₀), C₂(v₀), t)
 
+    C₁_lc = 2.2471857443877314
+    C₂_lc = -2.7975733412869563
+    τ_lc = 0.31220704080168854
+    u_lc(t) = u(C₁_lc, C₂_lc, t)
+    v_lc(t) = v(C₁_lc, C₂_lc, t)
+
     function display_params()
         println("I obl:")
         println("   α = ", α)
@@ -118,6 +124,12 @@ module obl2
     u(t, v₀) = u(C₁(v₀), C₂(v₀), t)
     v(t, v₀) = v(C₁(v₀), C₂(v₀), t)
 
+    C₁_lc = -0.7717391304347826
+    C₂_lc = 0.620932808961155
+    τ_lc = 0.24366356372770234
+    u_lc(t) = u(C₁_lc, C₂_lc, t)
+    v_lc(t) = v(C₁_lc, C₂_lc, t)
+
     function display_params()
         println("II obl:")
         println("   α = ", α)
@@ -162,6 +174,12 @@ module obl3
     ) + v₀_st
     u(t, v₀) = u(C₁(v₀), C₂(v₀), t)
     v(t, v₀) = v(C₁(v₀), C₂(v₀), t)
+
+    C₁_lc = 1.822222222222222
+    C₂_lc = 3.177317248659435
+    τ_lc = 0.09916901254424049
+    u_lc(t) = u(C₁_lc, C₂_lc, t)
+    v_lc(t) = v(C₁_lc, C₂_lc, t)
 
     function display_params()
         println("III obl:")
@@ -210,6 +228,12 @@ module obl4
     v(C₁, C₂, t) = obl2.v(C₁, C₂, t)
     u(t, v₀) = u(C₁(v₀), C₂(v₀), t)
     v(t, v₀) = v(C₁(v₀), C₂(v₀), t)
+
+    C₁_lc = 2.2282608695652173
+    C₂_lc = -1.8443561834372066
+    τ_lc = 0.11832175207602387
+    u_lc(t) = u(C₁_lc, C₂_lc, t)
+    v_lc(t) = v(C₁_lc, C₂_lc, t)
 
     function display_params()
         println("IIII obl:")
@@ -261,7 +285,14 @@ BAX_3segm_approx1(V) = general_3segm_approx(V, (V_p, V_v, I_p, I_v, k₃))
 BAX_3segm_approx2(u) = general_3segm_approx(u, (1.0, V_v/V_p, 1.0, I_v/I_p, k₃*R₀))
 
 # Нагрузочная прямая (load line)
-function load_line_function(u) return E-δ*u end
+function load_line_function1(V) return 1/R * (V_B - V) end
+function load_line_function2(u) return E-δ*u end
+
+#########################################################################################
+
+convert_u_to_V(u) = V_p * u
+convert_v_to_I(v) = I_p * v
+convert_τ_to_t(τ) = L/R * τ
 
 #########################################################################################
 
