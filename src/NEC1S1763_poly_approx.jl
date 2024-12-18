@@ -72,4 +72,32 @@ function general_integrate(model, U₀, t_span, as;
     return sol
 end
 
+#########################################################################################
+
+function convert_dim_to_dimless_coeff(as)
+    bs = zeros(length(as))
+    for i in eachindex(as)
+        a = as[i]
+        bs[i] = a * V_p^(i-1) / I_p
+        # println("b$(sub_string(string(i-1))) = $(b)")
+    end
+    return bs
+end
+
+function convert_V_to_u(V)
+    return V/V_p
+end
+
+function convert_u_to_v(u)
+    return u*V_p
+end
+
+function convert_I_to_v(I)
+    return I/I_p
+end
+
+function convert_v_to_I(v)
+    return v*I_p
+end
+
 end
